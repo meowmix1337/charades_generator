@@ -1,0 +1,6 @@
+# CODEOWNERS file
+# This file defines who owns the code in this repository
+# GitHub will automatically request reviews from code owners when PRs are created
+
+# Global owner - all files in the repository
+* @meowmix1337
