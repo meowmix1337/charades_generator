@@ -102,7 +102,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         status: 'round-end',
       };
 
-    case 'NEXT_TEAM':
+    case 'NEXT_TEAM': {
       const nextTeamIndex = (state.currentTeamIndex + 1) % state.teams.length;
       const isNewRound = nextTeamIndex === 0;
       return {
@@ -113,6 +113,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         currentWord: null,
         timeRemaining: state.settings.timerDuration,
       };
+    }
 
     case 'END_GAME':
       return {

@@ -19,11 +19,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { useGame } from '../../context/GameContext';
 import { Team, Difficulty } from '../../types/game.types';
 import { getCategories } from '../../data/wordDatabase';
-import { useWordSelector } from '../../hooks/useWordSelector';
 
 export function GameSetup() {
   const { dispatch } = useGame();
-  const { selectRandomWord } = useWordSelector();
   const [teams, setTeams] = useState<Team[]>([
     { id: '1', name: 'Team 1', score: 0 },
     { id: '2', name: 'Team 2', score: 0 },
@@ -53,7 +51,6 @@ export function GameSetup() {
   };
 
   const handleStartGame = () => {
-    const firstWord = selectRandomWord();
     dispatch({
       type: 'START_GAME',
       payload: {

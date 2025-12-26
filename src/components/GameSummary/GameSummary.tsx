@@ -10,7 +10,6 @@ import {
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useGame } from '../../context/GameContext';
-import { Team } from '../../types/game.types';
 import { ResetButton } from '../common/ResetButton';
 
 export function GameSummary() {

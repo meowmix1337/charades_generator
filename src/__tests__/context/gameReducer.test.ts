@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { GameState, GameAction } from '../../types/game.types';
+import { describe, it, expect } from 'vitest';
+import { GameState } from '../../types/game.types';
 
 // We need to extract the reducer function to test it
 // For now, we'll create a simple test that we can expand

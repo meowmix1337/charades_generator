@@ -11,13 +11,15 @@ afterEach(() => {
 });
 
 // Mock localStorage
-const localStorageMock = {
+const localStorageMock: Storage = {
   getItem: vi.fn(),
   setItem: vi.fn(),
   removeItem: vi.fn(),
   clear: vi.fn(),
+  key: vi.fn(),
+  length: 0,
 };
-global.localStorage = localStorageMock as any;
+global.localStorage = localStorageMock;
 
 // Mock Web Audio API
 global.AudioContext = vi.fn().mockImplementation(() => ({
@@ -37,4 +39,4 @@ global.AudioContext = vi.fn().mockImplementation(() => ({
   }),
   destination: {},
   currentTime: 0,
-})) as any;
+})) as unknown as typeof AudioContext;
