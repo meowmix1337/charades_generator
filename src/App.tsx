@@ -4,6 +4,7 @@ import { GameSetup } from './components/GameSetup/GameSetup';
 import { Countdown } from './components/GamePlay/Countdown';
 import { ActiveRound } from './components/GamePlay/ActiveRound';
 import { GameSummary } from './components/GameSummary/GameSummary';
+import { VersionFooter } from './components/common/VersionFooter';
 
 const theme = createTheme({
   palette: {
@@ -42,6 +43,7 @@ function App() {
       <CssBaseline />
       <GameProvider>
         <GameRouter />
+        <VersionFooter />
       </GameProvider>
     </ThemeProvider>
   );
