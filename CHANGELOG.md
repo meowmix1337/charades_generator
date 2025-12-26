@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.0.2] - 2025-12-26
+
 ### Added
 
-- In-app changelog viewer
+- Countdown beep sounds - audio alert plays for each countdown number (3-2-1-Start) to ensure players are aware the round is starting
+- In-app changelog viewer accessible via "What's New" link in footer
 
 ## [0.0.1] - 2025-12-26
 
@@ -48,5 +51,6 @@ Add changes under `[Unreleased]` using these categories:
 - **Removed** - Removed features
 - **Security** - Security updates
 
-[Unreleased]: https://github.com/yourusername/charades_generator/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/yourusername/charades_generator/releases/tag/v0.0.1
+[Unreleased]: https://github.com/meowmix1337/charades_generator/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/meowmix1337/charades_generator/compare/v0.0.1...v0.0.2
+[0.0.1]: https://github.com/meowmix1337/charades_generator/releases/tag/v0.0.1

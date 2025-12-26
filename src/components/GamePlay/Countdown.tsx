@@ -3,11 +3,17 @@ import { Box, Typography, Fade } from '@mui/material';
 import { useGame } from '../../context/GameContext';
 import { useWordSelector } from '../../hooks/useWordSelector';
 import { ResetButton } from '../common/ResetButton';
+import { playCountdownBeep } from '../../utils/audioUtils';
 
 export function Countdown() {
   const { dispatch } = useGame();
   const { selectRandomWord } = useWordSelector();
   const [count, setCount] = useState(3);
+
+  // Play beep sound when countdown number changes
+  useEffect(() => {
+    playCountdownBeep();
+  }, [count]);
 
   useEffect(() => {
     if (count > 0) {
