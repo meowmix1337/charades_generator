@@ -12,6 +12,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.0.2',
+    date: '2025-12-26',
+    changes: {
+      added: [
+        'Countdown beep sounds - audio alert plays for each countdown number (3-2-1-Start) to ensure players are aware the round is starting',
+        'In-app changelog viewer accessible via "What\'s New" link in footer',
+      ],
+    },
+  },
+  {
     version: '0.0.1',
     date: '2025-12-26',
     changes: {
@@ -30,7 +40,6 @@ export const changelog: ChangelogEntry[] = [
         'Version display showing build information',
         'localStorage to save game state across page refreshes',
         'Responsive design for desktop, tablet, and mobile',
-        'In-app changelog viewer',
       ],
     },
   },
