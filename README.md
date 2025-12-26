@@ -58,6 +58,18 @@ Preview the production build:
 npm run preview
 ```
 
+### Testing
+
+Run tests:
+```bash
+npm test                # Run all tests once
+npm run test:watch      # Watch mode
+npm run test:ui         # Interactive UI
+npm run test:coverage   # Generate coverage report
+```
+
+See [TESTING.md](./TESTING.md) for detailed testing documentation.
+
 ## How to Play
 
 ### 1. Game Setup
