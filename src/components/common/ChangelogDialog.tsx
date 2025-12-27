@@ -5,14 +5,10 @@ import {
   IconButton,
   Typography,
   Box,
-  Chip,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { changelog } from '../../data/changelog';
+import ReactMarkdown from 'react-markdown';
+import changelogMd from '../../../CHANGELOG.md?raw';
 
 interface ChangelogDialogProps {
   open: boolean;
@@ -20,6 +16,65 @@ interface ChangelogDialogProps {
 }
 
 export function ChangelogDialog({ open, onClose }: ChangelogDialogProps) {
+  // Customize react-markdown components for better styling
+  const markdownComponents = {
+    h1: ({ children }: { children?: React.ReactNode }) => (
+      <Typography variant="h4" component="h1" sx={{ mt: 2, mb: 1 }}>
+        {children}
+      </Typography>
+    ),
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <Typography variant="h5" component="h2" sx={{ mt: 3, mb: 1 }}>
+        {children}
+      </Typography>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => {
+      // Determine color based on section heading
+      const text = typeof children === 'string' ? children : '';
+      let color = 'text.primary';
+
+      if (text.includes('Added')) color = 'success.main';
+      else if (text.includes('Changed')) color = 'info.main';
+      else if (text.includes('Fixed')) color = 'warning.main';
+      else if (text.includes('Removed')) color = 'error.main';
+      else if (text.includes('Security')) color = 'error.main';
+
+      return (
+        <Typography variant="h6" component="h3" sx={{ mt: 2, mb: 1, color }}>
+          {children}
+        </Typography>
+      );
+    },
+    ul: ({ children }: { children?: React.ReactNode }) => (
+      <ul style={{ marginTop: '8px', marginBottom: '8px', paddingLeft: '24px' }}>
+        {children}
+      </ul>
+    ),
+    li: ({ children }: { children?: React.ReactNode }) => (
+      <li style={{ marginBottom: '4px' }}>
+        <Typography variant="body2" component="span">
+          {children}
+        </Typography>
+      </li>
+    ),
+    a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
+      <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
+        {children}
+      </a>
+    ),
+    code: ({ children }: { children?: React.ReactNode }) => (
+      <code style={{
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        padding: '2px 4px',
+        borderRadius: '3px',
+        fontFamily: 'monospace',
+        fontSize: '0.9em'
+      }}>
+        {children}
+      </code>
+    ),
+  };
+
   return (
     <Dialog
       open={open}
@@ -50,126 +105,9 @@ export function ChangelogDialog({ open, onClose }: ChangelogDialogProps) {
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        {changelog.map((entry, index) => (
-          <Box key={entry.version} sx={{ mb: index < changelog.length - 1 ? 4 : 0 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-              <Chip
-                label={`v${entry.version}`}
-                color="primary"
-                size="small"
-              />
-              <Typography variant="body2" color="text.secondary">
-                {new Date(entry.date).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </Typography>
-            </Box>
-
-            {entry.changes.added && entry.changes.added.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="success.main" sx={{ mb: 1 }}>
-                  Added
-                </Typography>
-                <List dense>
-                  {entry.changes.added.map((change, i) => (
-                    <ListItem key={i} sx={{ py: 0.5, pl: 2 }}>
-                      <ListItemText
-                        primary={change}
-                        primaryTypographyProps={{
-                          variant: 'body2',
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
-
-            {entry.changes.changed && entry.changes.changed.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="info.main" sx={{ mb: 1 }}>
-                  Changed
-                </Typography>
-                <List dense>
-                  {entry.changes.changed.map((change, i) => (
-                    <ListItem key={i} sx={{ py: 0.5, pl: 2 }}>
-                      <ListItemText
-                        primary={change}
-                        primaryTypographyProps={{
-                          variant: 'body2',
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
-
-            {entry.changes.fixed && entry.changes.fixed.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="warning.main" sx={{ mb: 1 }}>
-                  Fixed
-                </Typography>
-                <List dense>
-                  {entry.changes.fixed.map((change, i) => (
-                    <ListItem key={i} sx={{ py: 0.5, pl: 2 }}>
-                      <ListItemText
-                        primary={change}
-                        primaryTypographyProps={{
-                          variant: 'body2',
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
-
-            {entry.changes.removed && entry.changes.removed.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="error.main" sx={{ mb: 1 }}>
-                  Removed
-                </Typography>
-                <List dense>
-                  {entry.changes.removed.map((change, i) => (
-                    <ListItem key={i} sx={{ py: 0.5, pl: 2 }}>
-                      <ListItemText
-                        primary={change}
-                        primaryTypographyProps={{
-                          variant: 'body2',
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
-
-            {entry.changes.security && entry.changes.security.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="error.main" sx={{ mb: 1 }}>
-                  Security
-                </Typography>
-                <List dense>
-                  {entry.changes.security.map((change, i) => (
-                    <ListItem key={i} sx={{ py: 0.5, pl: 2 }}>
-                      <ListItemText
-                        primary={change}
-                        primaryTypographyProps={{
-                          variant: 'body2',
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
-
-            {index < changelog.length - 1 && <Divider sx={{ mt: 2 }} />}
-          </Box>
-        ))}
+        <Box sx={{ '& > *:first-of-type': { mt: 0 } }}>
+          <ReactMarkdown components={markdownComponents}>{changelogMd}</ReactMarkdown>
+        </Box>
       </DialogContent>
     </Dialog>
   );

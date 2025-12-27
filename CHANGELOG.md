@@ -2,8 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-
 ## [0.0.4] - 2025-12-27
 
 ### Added
@@ -80,21 +78,3 @@ All notable changes to this project will be documented in this file.
 - Vite build tool
 - GitHub Actions CI/CD
 - ESLint v9 for code quality
-
----
-
-## How to Update This Changelog
-
-Add changes under `[Unreleased]` using these categories:
-
-- **Added** - New features
-- **Changed** - Changes to existing features
-- **Fixed** - Bug fixes
-- **Removed** - Removed features
-- **Security** - Security updates
-
-[Unreleased]: https://github.com/meowmix1337/charades_generator/compare/v0.0.4...HEAD
-[0.0.4]: https://github.com/meowmix1337/charades_generator/compare/v0.0.3...v0.0.4
-[0.0.3]: https://github.com/meowmix1337/charades_generator/compare/v0.0.2...v0.0.3
-[0.0.2]: https://github.com/meowmix1337/charades_generator/compare/v0.0.1...v0.0.2
-[0.0.1]: https://github.com/meowmix1337/charades_generator/releases/tag/v0.0.1
