@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Button sound effects - distinct audio feedback for Skip (neutral tone) and Correct (positive ascending tones) buttons to help players confirm their actions
+
+### Changed
+
+- Round end alarm now plays a bell sound with harmonics instead of simple beeps for a more pleasant notification
+
 ## [0.0.2] - 2025-12-26
 
 ### Added
