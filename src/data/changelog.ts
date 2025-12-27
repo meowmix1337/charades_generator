@@ -12,6 +12,31 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.0.4',
+    date: '2025-12-27',
+    changes: {
+      added: [
+        'localStorage word history tracking - words are now remembered across game sessions',
+        '  - Automatically tracks used words for each category and difficulty combination',
+        '  - 7-day retention period with automatic cleanup every 24 hours',
+        '  - Prevents word repeats for better gameplay experience',
+        '  - Clear Word History button in GameSetup screen with confirmation dialog',
+        'Massively expanded word database for Actions, Animals, and Famous People categories',
+        '  - Actions: +150 words total (50 per difficulty level)',
+        '  - Animals: +150 words total (50 per difficulty level)',
+        '  - Famous People: +150 words total (50 per difficulty level)',
+        'Comprehensive test suite for word history utility with 20 passing tests',
+      ],
+      changed: [
+        'Word selection now checks both session and localStorage history to avoid repeats',
+        'Improved word database quality by removing numbered sequels and confusing variations',
+      ],
+      fixed: [
+        'Removed duplicate words across all categories and difficulty levels',
+      ],
+    },
+  },
+  {
     version: '0.0.3',
     date: '2025-12-27',
     changes: {

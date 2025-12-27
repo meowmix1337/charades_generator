@@ -13,12 +13,19 @@ import {
   IconButton,
   Grid,
   Slider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import HistoryIcon from '@mui/icons-material/History';
 import { useGame } from '../../context/GameContext';
 import { Team, Difficulty } from '../../types/game.types';
 import { getCategories } from '../../data/wordDatabase';
+import { clearWordHistory } from '../../utils/wordHistory';
 
 export function GameSetup() {
   const { dispatch } = useGame();
@@ -30,6 +37,7 @@ export function GameSetup() {
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
   const [timerDuration, setTimerDuration] = useState(120); // in seconds
   const [totalRounds, setTotalRounds] = useState(5);
+  const [clearHistoryDialogOpen, setClearHistoryDialogOpen] = useState(false);
 
   const categories = getCategories();
 
@@ -65,6 +73,19 @@ export function GameSetup() {
     });
     dispatch({ type: 'START_COUNTDOWN' });
     // The first word will be set when countdown completes
+  };
+
+  const handleClearHistoryClick = () => {
+    setClearHistoryDialogOpen(true);
+  };
+
+  const handleClearHistoryConfirm = () => {
+    clearWordHistory();
+    setClearHistoryDialogOpen(false);
+  };
+
+  const handleClearHistoryCancel = () => {
+    setClearHistoryDialogOpen(false);
   };
 
   return (
@@ -204,7 +225,43 @@ export function GameSetup() {
         >
           Start Game
         </Button>
+
+        {/* Clear History Button */}
+        <Button
+          fullWidth
+          variant="outlined"
+          color="warning"
+          size="medium"
+          startIcon={<HistoryIcon />}
+          onClick={handleClearHistoryClick}
+          sx={{ mt: 2 }}
+        >
+          Clear Word History
+        </Button>
       </Paper>
+
+      {/* Clear History Confirmation Dialog */}
+      <Dialog
+        open={clearHistoryDialogOpen}
+        onClose={handleClearHistoryCancel}
+      >
+        <DialogTitle>Clear Word History?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This will permanently delete all previously used words from the history.
+            You will start seeing words you've already played in recent sessions.
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClearHistoryCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClearHistoryConfirm} color="warning" variant="contained">
+            Clear History
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

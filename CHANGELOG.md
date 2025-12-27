@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.0.4] - 2025-12-27
+
+### Added
+
+- localStorage word history tracking - words are now remembered across game sessions
+  - Automatically tracks used words for each category and difficulty combination
+  - 7-day retention period with automatic cleanup every 24 hours
+  - Prevents word repeats for better gameplay experience
+  - Clear Word History button in GameSetup screen with confirmation dialog
+- Massively expanded word database for Actions, Animals, and Famous People categories
+  - Actions: +150 words total (50 per difficulty level)
+  - Animals: +150 words total (50 per difficulty level)
+  - Famous People: +150 words total (50 per difficulty level)
+- Comprehensive test suite for word history utility with 20 passing tests
+
+### Changed
+
+- Word selection now checks both session and localStorage history to avoid repeats
+- Improved word database quality by removing numbered sequels and confusing variations
+
+### Fixed
+
+- Removed duplicate words across all categories and difficulty levels
+
 ## [0.0.3] - 2025-12-27
 
 ### Added
@@ -69,7 +93,8 @@ Add changes under `[Unreleased]` using these categories:
 - **Removed** - Removed features
 - **Security** - Security updates
 
-[Unreleased]: https://github.com/meowmix1337/charades_generator/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/meowmix1337/charades_generator/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/meowmix1337/charades_generator/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/meowmix1337/charades_generator/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/meowmix1337/charades_generator/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/meowmix1337/charades_generator/releases/tag/v0.0.1
