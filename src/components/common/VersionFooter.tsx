@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { Box, Typography, Tooltip, Link } from '@mui/material';
+import { Box, Typography, Tooltip, Link, IconButton } from '@mui/material';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { getVersionInfo } from '../../utils/version';
 import { ChangelogDialog } from './ChangelogDialog';
+import { useThemeContext } from '../../context/ThemeContext';
 
 export function VersionFooter() {
   const versionInfo = getVersionInfo();
   const [changelogOpen, setChangelogOpen] = useState(false);
+  const { mode, toggleTheme } = useThemeContext();
 
   return (
     <>
@@ -73,6 +77,29 @@ export function VersionFooter() {
         >
           What's New
         </Link>
+        <Typography variant="caption" sx={{ color: 'text.secondary', opacity: 0.5 }}>
+          •
+        </Typography>
+        <Tooltip title={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`} placement="top-start">
+          <IconButton
+            onClick={toggleTheme}
+            size="small"
+            sx={{
+              color: 'text.secondary',
+              opacity: 0.5,
+              padding: 0.5,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+          >
+            {mode === 'light' ? (
+              <Brightness4Icon sx={{ fontSize: '1rem' }} />
+            ) : (
+              <Brightness7Icon sx={{ fontSize: '1rem' }} />
+            )}
+          </IconButton>
+        </Tooltip>
       </Box>
       <ChangelogDialog open={changelogOpen} onClose={() => setChangelogOpen(false)} />
     </>

@@ -1,22 +1,11 @@
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { GameProvider, useGame } from './context/GameContext';
+import { ThemeContextProvider, useThemeContext } from './context/ThemeContext';
 import { GameSetup } from './components/GameSetup/GameSetup';
 import { Countdown } from './components/GamePlay/Countdown';
 import { ActiveRound } from './components/GamePlay/ActiveRound';
 import { GameSummary } from './components/GameSummary/GameSummary';
 import { VersionFooter } from './components/common/VersionFooter';
-
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
 
 function GameRouter() {
   const { state } = useGame();
@@ -37,7 +26,9 @@ function GameRouter() {
   }
 }
 
-function App() {
+function ThemeAwareApp() {
+  const { theme } = useThemeContext();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -46,6 +37,14 @@ function App() {
         <VersionFooter />
       </GameProvider>
     </ThemeProvider>
+  );
+}
+
+function App() {
+  return (
+    <ThemeContextProvider>
+      <ThemeAwareApp />
+    </ThemeContextProvider>
   );
 }
 

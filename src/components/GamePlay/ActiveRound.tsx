@@ -76,7 +76,7 @@ export function ActiveRound() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   p: 2,
-                  bgcolor: index === state.currentTeamIndex ? 'primary.light' : 'grey.100',
+                  bgcolor: index === state.currentTeamIndex ? 'teamHighlight.background' : 'action.hover',
                   borderRadius: 1,
                 }}
               >
@@ -107,9 +107,9 @@ export function ActiveRound() {
                 elevation={0}
                 sx={{
                   p: 2,
-                  bgcolor: 'warning.light',
+                  bgcolor: 'roundWarning.background',
                   border: '2px solid',
-                  borderColor: 'warning.main',
+                  borderColor: 'roundWarning.border',
                   mb: 2,
                 }}
               >
@@ -199,7 +199,7 @@ export function ActiveRound() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            bgcolor: 'primary.main',
+            bgcolor: 'wordCard.background',
             color: 'white',
           }}
         >
@@ -280,7 +280,7 @@ export function ActiveRound() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   p: 1.5,
-                  bgcolor: index === state.currentTeamIndex ? 'primary.light' : 'transparent',
+                  bgcolor: index === state.currentTeamIndex ? 'teamHighlight.background' : 'transparent',
                   borderRadius: 1,
                 }}
               >
