@@ -12,6 +12,26 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.0.3',
+    date: '2025-12-27',
+    changes: {
+      added: [
+        'Dark mode support with light/dark theme toggle',
+        '  - Toggle button in footer (moon/sun icon) next to version display',
+        '  - Automatic system preference detection with manual override',
+        '  - User preference persisted in localStorage',
+        '  - All components updated to use theme-aware colors',
+        'Button sound effects - distinct audio feedback for Skip (descending tone sweep) and Correct (bright bell with harmonics) buttons to help players confirm their actions',
+        'Enhanced "START!" beep - final countdown beep is now louder and uses ascending tones (800Hz → 1000Hz) to clearly signal round beginning',
+      ],
+      changed: [
+        'Round end alarm now plays a bell sound with harmonics instead of simple beeps for a more pleasant notification',
+        'Manual "End Round" button now also plays bell sound for consistency',
+        'Reduced brightness of word card, team highlights, countdown screens, and round warning in dark mode for better readability and reduced eye strain',
+      ],
+    },
+  },
+  {
     version: '0.0.2',
     date: '2025-12-26',
     changes: {

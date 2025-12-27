@@ -34,9 +34,9 @@ export function ResetButton() {
             position: 'fixed',
             top: 16,
             right: 16,
-            bgcolor: 'rgba(0, 0, 0, 0.1)',
+            bgcolor: 'overlay.light',
             '&:hover': {
-              bgcolor: 'rgba(0, 0, 0, 0.2)',
+              bgcolor: 'overlay.dark',
             },
             zIndex: 1000,
           }}

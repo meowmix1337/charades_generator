@@ -17,7 +17,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import { useGame } from '../../context/GameContext';
 import { useTimer } from '../../hooks/useTimer';
 import { useWordSelector } from '../../hooks/useWordSelector';
-import { formatTime, playAlarmSound } from '../../utils/audioUtils';
+import { formatTime, playAlarmSound, playSkipSound, playCorrectSound } from '../../utils/audioUtils';
 import { ResetButton } from '../common/ResetButton';
 
 export function ActiveRound() {
@@ -37,16 +37,19 @@ export function ActiveRound() {
   }, [timeRemaining, state.status]);
 
   const handleSkip = () => {
+    playSkipSound();
     const nextWord = selectRandomWord();
     dispatch({ type: 'SKIP_WORD', payload: { nextWord } });
   };
 
   const handleCorrect = () => {
+    playCorrectSound();
     const nextWord = selectRandomWord();
     dispatch({ type: 'ADD_POINT', payload: { nextWord } });
   };
 
   const handleEndRound = () => {
+    playAlarmSound();
     dispatch({ type: 'END_ROUND' });
   };
 
@@ -73,7 +76,7 @@ export function ActiveRound() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   p: 2,
-                  bgcolor: index === state.currentTeamIndex ? 'primary.light' : 'grey.100',
+                  bgcolor: index === state.currentTeamIndex ? 'teamHighlight.background' : 'action.hover',
                   borderRadius: 1,
                 }}
               >
@@ -104,9 +107,9 @@ export function ActiveRound() {
                 elevation={0}
                 sx={{
                   p: 2,
-                  bgcolor: 'warning.light',
+                  bgcolor: 'roundWarning.background',
                   border: '2px solid',
-                  borderColor: 'warning.main',
+                  borderColor: 'roundWarning.border',
                   mb: 2,
                 }}
               >
@@ -196,7 +199,7 @@ export function ActiveRound() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            bgcolor: 'primary.main',
+            bgcolor: 'wordCard.background',
             color: 'white',
           }}
         >
@@ -277,7 +280,7 @@ export function ActiveRound() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   p: 1.5,
-                  bgcolor: index === state.currentTeamIndex ? 'primary.light' : 'transparent',
+                  bgcolor: index === state.currentTeamIndex ? 'teamHighlight.background' : 'transparent',
                   borderRadius: 1,
                 }}
               >

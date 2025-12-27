@@ -7,6 +7,7 @@ import {
   Stack,
   Divider,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useGame } from '../../context/GameContext';
@@ -14,6 +15,7 @@ import { ResetButton } from '../common/ResetButton';
 
 export function GameSummary() {
   const { state, dispatch } = useGame();
+  const theme = useTheme();
 
   const sortedTeams = [...state.teams].sort((a, b) => b.score - a.score);
   const maxScore = sortedTeams[0]?.score || 0;
@@ -29,7 +31,7 @@ export function GameSummary() {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: `linear-gradient(135deg, ${theme.palette.gradient.summaryStart} 0%, ${theme.palette.gradient.summaryEnd} 100%)`,
         py: 4,
       }}
     >
@@ -41,7 +43,7 @@ export function GameSummary() {
             <EmojiEventsIcon
               sx={{
                 fontSize: 80,
-                color: 'gold',
+                color: 'winner.gold',
                 mb: 2,
                 animation: 'bounce 1s ease-in-out infinite',
                 '@keyframes bounce': {
@@ -92,8 +94,8 @@ export function GameSummary() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      bgcolor: isWinner ? 'gold' : 'background.paper',
-                      border: isWinner ? '3px solid #FFD700' : 'none',
+                      bgcolor: isWinner ? 'winner.goldBg' : 'background.paper',
+                      border: isWinner ? `3px solid ${theme.palette.winner.goldBorder}` : 'none',
                       position: 'relative',
                     }}
                   >
@@ -135,7 +137,7 @@ export function GameSummary() {
           </Box>
 
           {/* Game Stats */}
-          <Paper elevation={1} sx={{ p: 3, mb: 4, bgcolor: 'grey.50' }}>
+          <Paper elevation={1} sx={{ p: 3, mb: 4, bgcolor: theme.palette.mode === 'light' ? 'grey.50' : 'grey.900' }}>
             <Typography variant="h6" gutterBottom>
               Game Statistics
             </Typography>

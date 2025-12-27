@@ -1,18 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, Fade } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useGame } from '../../context/GameContext';
 import { useWordSelector } from '../../hooks/useWordSelector';
 import { ResetButton } from '../common/ResetButton';
-import { playCountdownBeep } from '../../utils/audioUtils';
+import { playCountdownBeep, playStartBeep } from '../../utils/audioUtils';
 
 export function Countdown() {
   const { dispatch } = useGame();
   const { selectRandomWord } = useWordSelector();
+  const theme = useTheme();
   const [count, setCount] = useState(3);
 
   // Play beep sound when countdown number changes
   useEffect(() => {
-    playCountdownBeep();
+    if (count === 0) {
+      playStartBeep(); // Different, more alerting sound for START!
+    } else {
+      playCountdownBeep(); // Regular beep for 3, 2, 1
+    }
   }, [count]);
 
   useEffect(() => {
@@ -33,7 +39,7 @@ export function Countdown() {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        backgroundColor: count === 0 ? '#4caf50' : '#1976d2',
+        backgroundColor: count === 0 ? theme.palette.countdown.start : theme.palette.countdown.ready,
         transition: 'background-color 0.3s ease',
       }}
     >
