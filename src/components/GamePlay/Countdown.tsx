@@ -3,7 +3,7 @@ import { Box, Typography, Fade } from '@mui/material';
 import { useGame } from '../../context/GameContext';
 import { useWordSelector } from '../../hooks/useWordSelector';
 import { ResetButton } from '../common/ResetButton';
-import { playCountdownBeep } from '../../utils/audioUtils';
+import { playCountdownBeep, playStartBeep } from '../../utils/audioUtils';
 
 export function Countdown() {
   const { dispatch } = useGame();
@@ -12,7 +12,11 @@ export function Countdown() {
 
   // Play beep sound when countdown number changes
   useEffect(() => {
-    playCountdownBeep();
+    if (count === 0) {
+      playStartBeep(); // Different, more alerting sound for START!
+    } else {
+      playCountdownBeep(); // Regular beep for 3, 2, 1
+    }
   }, [count]);
 
   useEffect(() => {

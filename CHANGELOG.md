@@ -6,11 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Button sound effects - distinct audio feedback for Skip (neutral tone) and Correct (positive ascending tones) buttons to help players confirm their actions
+- Button sound effects - distinct audio feedback for Skip (descending tone sweep) and Correct (bright bell with harmonics) buttons to help players confirm their actions
+- Enhanced "START!" beep - final countdown beep is now louder and uses ascending tones (800Hz → 1000Hz) to clearly signal round beginning
 
 ### Changed
 
 - Round end alarm now plays a bell sound with harmonics instead of simple beeps for a more pleasant notification
+- Manual "End Round" button now also plays bell sound for consistency
 
 ## [0.0.2] - 2025-12-26
 
