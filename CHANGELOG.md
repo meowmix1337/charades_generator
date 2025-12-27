@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.0.3] - 2025-12-27
+
 ### Added
 
 - Dark mode support with light/dark theme toggle
@@ -18,7 +20,7 @@ All notable changes to this project will be documented in this file.
 
 - Round end alarm now plays a bell sound with harmonics instead of simple beeps for a more pleasant notification
 - Manual "End Round" button now also plays bell sound for consistency
-- Reduced brightness of word card, team highlights, and countdown screens in dark mode for better readability and reduced eye strain
+- Reduced brightness of word card, team highlights, countdown screens, and round warning in dark mode for better readability and reduced eye strain
 
 ## [0.0.2] - 2025-12-26
 
@@ -67,6 +69,7 @@ Add changes under `[Unreleased]` using these categories:
 - **Removed** - Removed features
 - **Security** - Security updates
 
-[Unreleased]: https://github.com/meowmix1337/charades_generator/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/meowmix1337/charades_generator/compare/v0.0.3...HEAD
+[0.0.3]: https://github.com/meowmix1337/charades_generator/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/meowmix1337/charades_generator/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/meowmix1337/charades_generator/releases/tag/v0.0.1
