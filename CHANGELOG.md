@@ -6,10 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- 28 new words to Actions category across all difficulty levels
-  - Easy (+17): Moonwalking, Doing the robot, Air guitaring, Playing frisbee, Walking a dog, Eating corn on the cob, Using chopsticks, Licking an ice cream cone, Roasting marshmallows, Arm wrestling, Playing peek-a-boo, Cannonball jump, Sledding, Tripping, Playing rock paper scissors
-  - Medium (+9): Doing the worm, Playing beer pong, Playing twister, Limbo dancing, Karaoke singing, Playing darts, Playing cornhole, Body surfing, Doing a keg stand
-  - Hard (+2): Ice bucket challenge, Planking
+- 28 new words to Actions category across all difficulty levels (easy: +17, medium: +9, hard: +2)
 
 ## [0.0.5] - 2026-02-21
 
