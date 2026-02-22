@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.5] - 2026-02-21
+
+### Added
+
+- `AGENTS.md` at project root with project overview, architecture, commit convention, and release checklist
+- `src/data/AGENTS.md` with word database structure, line ranges, and contribution guidelines
+
+### Changed
+
+- Removed 34 extinct animals from the Animals hard difficulty word list
+
 ## [0.0.4] - 2025-12-27
 
 ### Added
