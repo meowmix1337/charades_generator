@@ -106,6 +106,13 @@ Every change should be committed with a small, focused commit using this format:
 
 Keep commits small and atomic — one logical change per commit.
 
+### Release Checklist
+
+Every change must also update these files before committing:
+
+1. **`CHANGELOG.md`** — Add an entry under the current version's section (or create a new version section if needed). Follow the existing [Keep a Changelog](https://keepachangelog.com) format with `Added`, `Changed`, `Fixed`, and `Technical` subsections.
+2. **`package.json`** — Bump the `version` field to match the new version in `CHANGELOG.md`. Use [semver](https://semver.org/): patch for fixes and small changes, minor for new features, major for breaking changes.
+
 ## Code Conventions
 
 - **Functional components only** — no class components
