@@ -725,6 +725,7 @@ export const wordDatabase: WordDatabase = {
   },
   Actions: {
     easy: [
+      'Pooping',
       'Running',
       'Jumping',
       'Swimming',
