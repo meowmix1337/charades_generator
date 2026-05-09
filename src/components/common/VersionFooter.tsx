@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Box, Typography, Tooltip, Link, IconButton } from '@mui/material';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { Moon, Sun } from 'lucide-react';
 import { getVersionInfo } from '../../utils/version';
 import { ChangelogDialog } from './ChangelogDialog';
 import { useThemeContext } from '../../context/ThemeContext';
@@ -94,9 +93,9 @@ export function VersionFooter() {
             }}
           >
             {mode === 'light' ? (
-              <Brightness4Icon sx={{ fontSize: '1rem' }} />
+              <Moon size={14} strokeWidth={2} />
             ) : (
-              <Brightness7Icon sx={{ fontSize: '1rem' }} />
+              <Sun size={14} strokeWidth={2} />
             )}
           </IconButton>
         </Tooltip>

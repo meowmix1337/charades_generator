@@ -5,8 +5,6 @@ import {
   Typography,
   TextField,
   Button,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
   Paper,
@@ -18,14 +16,23 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
+  Chip,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import HistoryIcon from '@mui/icons-material/History';
+import { Trash2, Plus, History, Play } from 'lucide-react';
 import { useGame } from '../../context/GameContext';
 import { Team, Difficulty } from '../../types/game.types';
 import { getCategories } from '../../data/wordDatabase';
 import { clearWordHistory } from '../../utils/wordHistory';
+import { Logo } from '../common/Logo';
+
+const DIFFICULTY_COLORS: Record<Difficulty, { bg: string; fg: string }> = {
+  easy: { bg: 'var(--lime)', fg: 'var(--ink)' },
+  medium: { bg: 'var(--yellow)', fg: 'var(--ink)' },
+  hard: { bg: 'var(--magenta)', fg: 'var(--paper)' },
+};
+
+const formatTime = (s: number) =>
+  `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
 export function GameSetup() {
   const { dispatch } = useGame();
@@ -35,7 +42,7 @@ export function GameSetup() {
   ]);
   const [category, setCategory] = useState('Movies');
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
-  const [timerDuration, setTimerDuration] = useState(120); // in seconds
+  const [timerDuration, setTimerDuration] = useState(120);
   const [totalRounds, setTotalRounds] = useState(5);
   const [clearHistoryDialogOpen, setClearHistoryDialogOpen] = useState(false);
 
@@ -43,19 +50,17 @@ export function GameSetup() {
 
   const handleAddTeam = () => {
     if (teams.length < 4) {
-      const newId = (Math.max(...teams.map(t => parseInt(t.id))) + 1).toString();
+      const newId = (Math.max(...teams.map((t) => parseInt(t.id))) + 1).toString();
       setTeams([...teams, { id: newId, name: `Team ${newId}`, score: 0 }]);
     }
   };
 
   const handleRemoveTeam = (id: string) => {
-    if (teams.length > 1) {
-      setTeams(teams.filter(team => team.id !== id));
-    }
+    if (teams.length > 1) setTeams(teams.filter((team) => team.id !== id));
   };
 
   const handleTeamNameChange = (id: string, name: string) => {
-    setTeams(teams.map(team => team.id === id ? { ...team, name } : team));
+    setTeams(teams.map((team) => (team.id === id ? { ...team, name } : team)));
   };
 
   const handleStartGame = () => {
@@ -63,60 +68,85 @@ export function GameSetup() {
       type: 'START_GAME',
       payload: {
         teams,
-        settings: {
-          category,
-          difficulty,
-          timerDuration,
-        },
+        settings: { category, difficulty, timerDuration },
         totalRounds,
       },
     });
     dispatch({ type: 'START_COUNTDOWN' });
-    // The first word will be set when countdown completes
-  };
-
-  const handleClearHistoryClick = () => {
-    setClearHistoryDialogOpen(true);
-  };
-
-  const handleClearHistoryConfirm = () => {
-    clearWordHistory();
-    setClearHistoryDialogOpen(false);
-  };
-
-  const handleClearHistoryCancel = () => {
-    setClearHistoryDialogOpen(false);
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
+    <Container maxWidth="md" sx={{ py: 5 }}>
+      {/* Header */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 3,
+        }}
+      >
+        <Logo size="lg" />
+      </Box>
+
+      <Paper sx={{ p: { xs: 3, sm: 4.5 } }}>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: 'clamp(2.25rem, 5vw, 3rem)',
+            mb: 1,
+            textTransform: 'uppercase',
+          }}
+        >
           Charades Setup
         </Typography>
+        <Typography sx={{ color: 'text.secondary', mb: 4 }}>
+          Build your roster, pick a category, set the clock. Hit Start when the room is ready.
+        </Typography>
 
-        {/* Teams Setup */}
+        {/* Teams */}
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h5" gutterBottom>
-            Teams ({teams.length}/4)
-          </Typography>
-          <Grid container spacing={2}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+            <Typography variant="h3" sx={{ fontSize: '1.375rem', m: 0 }}>
+              Teams
+            </Typography>
+            <Chip label={`${teams.length}/4`} />
+          </Box>
+          <Grid container spacing={1.25}>
             {teams.map((team) => (
               <Grid item xs={12} sm={6} key={team.id}>
                 <Box sx={{ display: 'flex', gap: 1 }}>
                   <TextField
                     fullWidth
-                    label={`Team ${team.id} Name`}
+                    size="small"
+                    placeholder={`Team ${team.id} Name`}
                     value={team.name}
                     onChange={(e) => handleTeamNameChange(team.id, e.target.value)}
                   />
                   {teams.length > 1 && (
                     <IconButton
-                      color="error"
                       onClick={() => handleRemoveTeam(team.id)}
-                      sx={{ flexShrink: 0 }}
+                      aria-label="Remove team"
+                      sx={{
+                        flexShrink: 0,
+                        border: '2px solid var(--ink)',
+                        backgroundColor: 'var(--magenta)',
+                        color: 'var(--paper)',
+                        boxShadow: '3px 3px 0 var(--ink)',
+                        width: 44,
+                        height: 44,
+                        '&:hover': {
+                          backgroundColor: 'var(--magenta)',
+                          boxShadow: '5px 5px 0 var(--ink)',
+                          transform: 'translate(-2px,-2px)',
+                        },
+                        '&:active': {
+                          boxShadow: '0 0 0 var(--ink)',
+                          transform: 'translate(2px,2px)',
+                        },
+                      }}
                     >
-                      <DeleteIcon />
+                      <Trash2 size={18} strokeWidth={2} />
                     </IconButton>
                   )}
                 </Box>
@@ -125,23 +155,37 @@ export function GameSetup() {
           </Grid>
           {teams.length < 4 && (
             <Button
-              startIcon={<AddIcon />}
+              size="small"
+              variant="contained"
+              color="warning"
+              startIcon={<Plus size={14} strokeWidth={2} />}
               onClick={handleAddTeam}
-              sx={{ mt: 2 }}
-              variant="outlined"
+              sx={{ mt: 1.75 }}
             >
               Add Team
             </Button>
           )}
         </Box>
 
-        {/* Category Selection */}
-        <Box sx={{ mb: 4 }}>
-          <FormControl fullWidth>
-            <InputLabel>Category</InputLabel>
+        {/* Category + Difficulty */}
+        <Grid container spacing={2} sx={{ mb: 3.5 }}>
+          <Grid item xs={12} sm={6}>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.6875rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'text.secondary',
+                mb: 0.75,
+              }}
+            >
+              Category
+            </Typography>
             <Select
+              fullWidth
+              size="small"
               value={category}
-              label="Category"
               onChange={(e) => setCategory(e.target.value)}
             >
               {categories.map((cat) => (
@@ -150,30 +194,74 @@ export function GameSetup() {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
-        </Box>
-
-        {/* Difficulty Selection */}
-        <Box sx={{ mb: 4 }}>
-          <FormControl fullWidth>
-            <InputLabel>Difficulty</InputLabel>
-            <Select
-              value={difficulty}
-              label="Difficulty"
-              onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.6875rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'text.secondary',
+                mb: 0.75,
+              }}
             >
-              <MenuItem value="easy">Easy</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="hard">Hard</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+              Difficulty
+            </Typography>
+            <Box sx={{ display: 'flex', border: '2px solid var(--ink)' }}>
+              {(['easy', 'medium', 'hard'] as Difficulty[]).map((d, i) => {
+                const active = difficulty === d;
+                const colors = DIFFICULTY_COLORS[d];
+                return (
+                  <Box
+                    component="button"
+                    key={d}
+                    type="button"
+                    onClick={() => setDifficulty(d)}
+                    sx={{
+                      flex: 1,
+                      padding: '12px 8px',
+                      border: 'none',
+                      borderRight: i !== 2 ? '2px solid var(--ink)' : 'none',
+                      backgroundColor: active ? colors.bg : 'var(--paper)',
+                      color: active ? colors.fg : 'var(--ink)',
+                      fontFamily: '"Space Grotesk", sans-serif',
+                      fontWeight: 700,
+                      fontSize: 12,
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      transition: 'background 120ms ease, color 120ms ease',
+                    }}
+                  >
+                    {d}
+                  </Box>
+                );
+              })}
+            </Box>
+          </Grid>
+        </Grid>
 
-        {/* Timer Duration */}
-        <Box sx={{ mb: 4 }}>
-          <Typography gutterBottom>
-            Timer Duration: {Math.floor(timerDuration / 60)}:{(timerDuration % 60).toString().padStart(2, '0')}
-          </Typography>
+        {/* Timer */}
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'text.secondary',
+              }}
+            >
+              Timer Duration
+            </Typography>
+            <Typography
+              sx={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, fontSize: 18 }}
+            >
+              {formatTime(timerDuration)}
+            </Typography>
+          </Box>
           <Slider
             value={timerDuration}
             onChange={(_, value) => setTimerDuration(value as number)}
@@ -189,15 +277,30 @@ export function GameSetup() {
               { value: 300, label: '5:00' },
             ]}
             valueLabelDisplay="auto"
-            valueLabelFormat={(value) => `${Math.floor(value / 60)}:${(value % 60).toString().padStart(2, '0')}`}
+            valueLabelFormat={(v) => formatTime(v)}
           />
         </Box>
 
-        {/* Total Rounds */}
+        {/* Rounds */}
         <Box sx={{ mb: 4 }}>
-          <Typography gutterBottom>
-            Total Rounds: {totalRounds}
-          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'text.secondary',
+              }}
+            >
+              Total Rounds
+            </Typography>
+            <Typography
+              sx={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, fontSize: 18 }}
+            >
+              {totalRounds}
+            </Typography>
+          </Box>
           <Slider
             value={totalRounds}
             onChange={(_, value) => setTotalRounds(value as number)}
@@ -219,22 +322,23 @@ export function GameSetup() {
         <Button
           fullWidth
           variant="contained"
+          color="primary"
           size="large"
+          startIcon={<Play size={22} strokeWidth={2} />}
           onClick={handleStartGame}
-          sx={{ mt: 2, py: 2 }}
+          sx={{ py: 2.5, fontSize: '1.125rem', boxShadow: '6px 6px 0 var(--ink)' }}
         >
           Start Game
         </Button>
 
-        {/* Clear History Button */}
+        {/* Clear History */}
         <Button
           fullWidth
-          variant="outlined"
-          color="warning"
-          size="medium"
-          startIcon={<HistoryIcon />}
-          onClick={handleClearHistoryClick}
-          sx={{ mt: 2 }}
+          variant="text"
+          size="small"
+          startIcon={<History size={14} strokeWidth={2} />}
+          onClick={() => setClearHistoryDialogOpen(true)}
+          sx={{ mt: 1.5 }}
         >
           Clear Word History
         </Button>
@@ -243,21 +347,27 @@ export function GameSetup() {
       {/* Clear History Confirmation Dialog */}
       <Dialog
         open={clearHistoryDialogOpen}
-        onClose={handleClearHistoryCancel}
+        onClose={() => setClearHistoryDialogOpen(false)}
       >
         <DialogTitle>Clear Word History?</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            This will permanently delete all previously used words from the history.
-            You will start seeing words you've already played in recent sessions.
-            This action cannot be undone.
+          <DialogContentText sx={{ color: 'text.primary' }}>
+            This will permanently delete all previously used words from the history. You will start
+            seeing words you've already played in recent sessions. This action cannot be undone.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClearHistoryCancel} color="primary">
+        <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
+          <Button variant="text" onClick={() => setClearHistoryDialogOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleClearHistoryConfirm} color="warning" variant="contained">
+          <Button
+            variant="contained"
+            color="warning"
+            onClick={() => {
+              clearWordHistory();
+              setClearHistoryDialogOpen(false);
+            }}
+          >
             Clear History
           </Button>
         </DialogActions>

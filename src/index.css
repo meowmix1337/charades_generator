@@ -1,16 +1,186 @@
+/* ============================================================
+   Charades Generator — Design System Tokens
+   Sharp-edge, high-voltage reskin.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* Surfaces */
+  --ink:           #0A0A0B;
+  --ink-2:         #1A1A1D;
+  --paper:         #FAFAF5;
+  --paper-2:       #F0F0EA;
+  --line:          #0A0A0B;
+  --line-soft:     rgba(10, 10, 11, 0.12);
+  --line-on-dark:  rgba(255, 255, 255, 0.16);
+
+  /* Voltage accents */
+  --lime:          #C6FF3D;
+  --lime-deep:     #9FD61A;
+  --magenta:       #FF2E63;
+  --magenta-deep:  #D9134A;
+  --yellow:        #FFE600;
+  --yellow-deep:   #D6C200;
+  --cobalt:        #1F3DFF;
+  --cobalt-deep:   #0E25CC;
+  --gold:          #FFB800;
+  --gold-deep:     #D69900;
+
+  /* Category */
+  --cat-movies:        #FF2E63;
+  --cat-actions:       #C6FF3D;
+  --cat-animals:       #FFB800;
+  --cat-objects:       #1F3DFF;
+  --cat-famous-people: #FF7A1A;
+  --cat-places:        #00C2A8;
+
+  /* Semantic foregrounds */
+  --fg-1:          var(--ink);
+  --fg-2:          rgba(10, 10, 11, 0.72);
+  --fg-3:          rgba(10, 10, 11, 0.52);
+  --fg-on-dark:    var(--paper);
+
+  /* Type */
+  --font-display:  'Archivo Black', 'Impact', system-ui, sans-serif;
+  --font-body:     'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --fs-display-xl: clamp(6rem, 18vw, 16rem);
+  --fs-display-l:  clamp(3.5rem, 8vw, 6rem);
+  --fs-display-m:  clamp(2.25rem, 4vw, 3rem);
+  --fs-timer:      clamp(3.5rem, 11vw, 6rem);
+
+  --tracking-tight:  -0.02em;
+  --tracking-wide:   0.06em;
+  --tracking-caps:   0.12em;
+
+  /* Spacing */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
+  --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
+
+  /* Borders / shadows */
+  --bw-2: 2px;
+  --bw-3: 3px;
+  --bw-4: 4px;
+
+  --shadow-rest:    4px 4px 0 var(--ink);
+  --shadow-hover:   6px 6px 0 var(--ink);
+  --shadow-press:   0 0 0 var(--ink);
+  --shadow-rest-on-dark:  4px 4px 0 var(--paper);
+
+  /* Motion */
+  --ease-enter: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit:  cubic-bezier(0.4, 0, 1, 1);
+  --d-micro: 120ms;
+  --d-comp:  200ms;
+  --d-screen: 400ms;
+}
+
+/* Dark-mode override (used when MUI is in dark mode) */
+[data-theme='dark'] {
+  --paper:    #0A0A0B;
+  --paper-2:  #1A1A1D;
+  --ink:      #FAFAF5;
+  --line:     #FAFAF5;
+  --fg-1:     #FAFAF5;
+  --fg-2:     rgba(250, 250, 245, 0.72);
+  --fg-3:     rgba(250, 250, 245, 0.52);
+  --shadow-rest:  4px 4px 0 var(--paper);
+  --shadow-hover: 6px 6px 0 var(--paper);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html, body, #root {
+  min-height: 100vh;
+  width: 100%;
+}
+
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
+  background: var(--paper);
+  background-image: radial-gradient(circle, rgba(10,10,11,0.06) 1px, transparent 1px);
+  background-size: 18px 18px;
+  color: var(--fg-1);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  width: 100%;
-  min-height: 100vh;
+[data-theme='dark'] body {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+}
+
+/* Utility classes */
+.cg-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+.cg-display {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-tight);
+  line-height: 0.95;
+}
+
+.cg-mono {
+  font-family: var(--font-mono);
+}
+
+/* Animations */
+@keyframes cg-pop-in {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes cg-flash {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+
+@keyframes cg-trophy-tilt {
+  0%   { transform: rotate(-12deg) scale(0.5); opacity: 0; }
+  55%  { transform: rotate(8deg) scale(1.15); opacity: 1; }
+  78%  { transform: rotate(-3deg) scale(0.96); }
+  100% { transform: rotate(0) scale(1); }
+}
+
+@keyframes cg-confetti-drop {
+  0%   { transform: translate(var(--cx, 0), -20vh) rotate(0); opacity: 1; }
+  100% { transform: translate(var(--cx, 0), 110vh) rotate(720deg); opacity: 1; }
+}
+
+@keyframes cg-burst-rays {
+  0%   { transform: translate(-50%, -50%) scale(0.3) rotate(0); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.4) rotate(45deg); opacity: 0; }
+}
+
+@keyframes cg-title-shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+
+.cg-pop-in     { animation: cg-pop-in var(--d-screen) var(--ease-enter); }
+.cg-warn-flash { animation: cg-flash 1s steps(2, end) infinite; }
+.cg-trophy-pop { animation: cg-trophy-tilt 800ms var(--ease-enter); }
+.cg-title-shake { animation: cg-title-shake 600ms var(--ease-enter) 200ms; }
+
+.cg-confetti {
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 22px;
+  animation: cg-confetti-drop 2.6s linear infinite;
+  pointer-events: none;
 }

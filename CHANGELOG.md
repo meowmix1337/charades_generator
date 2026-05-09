@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.7] - 2026-05-09
+
+### Changed
+
+- Full visual redesign with sharp-edge, high-voltage brand system
+  - New palette: Electric Lime, Cobalt, Hot Magenta, Voltage Yellow, Trophy Gold over Stage Black / warm Paper surfaces
+  - Typography: Archivo Black for display, Space Grotesk for UI, JetBrains Mono for timer and numerics (Google Fonts)
+  - Border radius set to 0 across the app; structural 2px borders replace soft elevation
+  - Hard offset block shadows on buttons and cards (4px → 6px lift on hover, collapse on press)
+  - Reskinned all screens: GameSetup (logo lockup, segmented difficulty toggle, sharp sliders), Countdown (Cobalt → Lime flip), ActiveRound (timer card with progress bar, Cobalt word card, lime/magenta dual CTAs), RoundEnd (shake animation, yellow Get Ready callout), GameSummary (gold trophy block, conic burst rays, falling confetti)
+- Replaced `@mui/icons-material` icons with `lucide-react` (2px stroke) across the app
+- Reset button is now a circular floating control with hover-to-magenta state
+- Theme toggle preserved; voltage palette is mode-agnostic with surfaces flipping between Stage Black and Paper
+
+### Added
+
+- `lucide-react` dependency for sharp 2px-stroke iconography
+- `Logo` component with lime square mask mark and Archivo Black wordmark
+- New keyframes: `cg-pop-in`, `cg-warn-flash`, `cg-trophy-pop`, `cg-title-shake`, `cg-confetti-drop`, `cg-burst-rays`
+
 ## [0.0.6] - 2026-02-21
 
 ### Added
