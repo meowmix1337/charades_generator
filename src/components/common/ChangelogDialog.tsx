@@ -6,7 +6,7 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { X as CloseIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import changelogMd from '../../../CHANGELOG.md?raw';
 
@@ -101,7 +101,7 @@ export function ChangelogDialog({ open, onClose }: ChangelogDialogProps) {
             color: (theme) => theme.palette.grey[500],
           }}
         >
-          <CloseIcon />
+          <CloseIcon size={20} strokeWidth={2} />
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>

@@ -5,20 +5,30 @@ import {
   Typography,
   Button,
   Paper,
-  LinearProgress,
   Chip,
   Stack,
 } from '@mui/material';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import StopIcon from '@mui/icons-material/Stop';
+import {
+  ChevronsRight,
+  Check,
+  Pause,
+  Play,
+  Square,
+} from 'lucide-react';
 import { useGame } from '../../context/GameContext';
 import { useTimer } from '../../hooks/useTimer';
 import { useWordSelector } from '../../hooks/useWordSelector';
 import { formatTime, playAlarmSound, playSkipSound, playCorrectSound } from '../../utils/audioUtils';
 import { ResetButton } from '../common/ResetButton';
+
+const CATEGORY_COLORS: Record<string, string> = {
+  Movies: '#FF2E63',
+  Actions: '#C6FF3D',
+  Animals: '#FFB800',
+  Objects: '#1F3DFF',
+  'Famous People': '#FF7A1A',
+  Places: '#00C2A8',
+};
 
 export function ActiveRound() {
   const { state, dispatch } = useGame();
@@ -29,7 +39,6 @@ export function ActiveRound() {
   const progress = (timeRemaining / state.settings.timerDuration) * 100;
   const isWarning = timeRemaining <= 10;
 
-  // Play alarm when timer expires
   useEffect(() => {
     if (timeRemaining === 0 && state.status === 'round-end') {
       playAlarmSound();
@@ -53,86 +62,132 @@ export function ActiveRound() {
     dispatch({ type: 'END_ROUND' });
   };
 
+  // ROUND END
   if (state.status === 'round-end') {
+    const isLastTeam = state.currentTeamIndex === state.teams.length - 1;
+    const isLastRound = state.currentRound >= state.totalRounds;
+    const gameOver = isLastRound && isLastTeam;
+    const nextTeam = isLastTeam ? state.teams[0] : state.teams[state.currentTeamIndex + 1];
+
     return (
-      <Container maxWidth="md" sx={{ py: 4 }}>
+      <Container maxWidth="md" sx={{ py: 5 }}>
         <ResetButton />
-        <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
-          <Typography variant="h4" gutterBottom color="error">
+        <Paper sx={{ p: { xs: 3, sm: 5 }, textAlign: 'center' }}>
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: '0.75rem',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--magenta)',
+              mb: 1,
+            }}
+          >
+            Round {state.currentRound} of {state.totalRounds}
+          </Typography>
+          <Typography
+            variant="h1"
+            className="cg-title-shake"
+            sx={{
+              fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+              mb: 1.5,
+              textTransform: 'uppercase',
+            }}
+          >
             Time's Up!
           </Typography>
-          <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
-            {currentTeam.name} scored {currentTeam.score} points this round
+          <Typography sx={{ fontSize: 18, mb: 3.5 }}>
+            <strong>{currentTeam.name}</strong> scored{' '}
+            <Box
+              component="span"
+              sx={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}
+            >
+              {currentTeam.score}
+            </Box>{' '}
+            points so far.
           </Typography>
 
-          <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
-            Current Scores:
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: '0.75rem',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'text.secondary',
+              mb: 1,
+              textAlign: 'left',
+            }}
+          >
+            Current Scores
           </Typography>
-          <Stack spacing={1} sx={{ mb: 4 }}>
+          <Box sx={{ mb: 3.5 }}>
             {state.teams.map((team, index) => (
-              <Box
+              <ScoreRow
                 key={team.id}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  p: 2,
-                  bgcolor: index === state.currentTeamIndex ? 'teamHighlight.background' : 'action.hover',
-                  borderRadius: 1,
-                }}
-              >
-                <Typography variant="body1" fontWeight="bold">
-                  {team.name}
-                </Typography>
-                <Typography variant="body1">
-                  {team.score} points
-                </Typography>
-              </Box>
+                name={team.name}
+                score={team.score}
+                active={index === state.currentTeamIndex}
+                stack={index > 0}
+              />
             ))}
-          </Stack>
+          </Box>
 
-          {state.currentRound >= state.totalRounds &&
-           state.currentTeamIndex === state.teams.length - 1 ? (
+          {gameOver ? (
             <Button
               fullWidth
               variant="contained"
+              color="primary"
               size="large"
               onClick={() => dispatch({ type: 'END_GAME' })}
-              sx={{ mt: 2 }}
+              sx={{ py: 2.5, fontSize: '1.125rem', boxShadow: '6px 6px 0 var(--ink)' }}
             >
               End Game
             </Button>
           ) : (
             <>
-              <Paper
-                elevation={0}
+              <Box
                 sx={{
-                  p: 2,
-                  bgcolor: 'roundWarning.background',
-                  border: '2px solid',
-                  borderColor: 'roundWarning.border',
+                  backgroundColor: 'var(--yellow)',
+                  border: '2px solid var(--ink)',
+                  padding: '16px 18px',
                   mb: 2,
+                  textAlign: 'left',
                 }}
               >
-                <Typography variant="body1" fontWeight="bold" gutterBottom>
-                  ⚠️ Get Ready!
+                <Typography
+                  sx={{
+                    fontFamily: '"Archivo Black", Impact, sans-serif',
+                    fontSize: 20,
+                    letterSpacing: '-0.02em',
+                    mb: 0.5,
+                    color: 'var(--ink)',
+                  }}
+                >
+                  ⚠ GET READY
                 </Typography>
-                <Typography variant="body2">
-                  {state.currentTeamIndex === state.teams.length - 1
-                    ? `Round ${state.currentRound + 1} is about to begin. ${state.teams[0].name} will play next.`
-                    : `${state.teams[state.currentTeamIndex + 1].name} is up next.`}
-                  {' '}The countdown will start immediately when you click the button below.
+                <Typography sx={{ fontSize: 14, lineHeight: 1.5, color: 'var(--ink)' }}>
+                  {isLastTeam ? (
+                    <>
+                      Round <strong>{state.currentRound + 1}</strong> is about to begin.{' '}
+                      <strong>{nextTeam.name}</strong> will play next.
+                    </>
+                  ) : (
+                    <>
+                      <strong>{nextTeam.name}</strong> is up next.
+                    </>
+                  )}{' '}
+                  The countdown will start immediately when you click below.
                 </Typography>
-              </Paper>
+              </Box>
               <Button
                 fullWidth
                 variant="contained"
+                color="primary"
                 size="large"
-                onClick={() => {
-                  dispatch({ type: 'NEXT_TEAM' });
-                }}
-                sx={{ mt: 2 }}
+                onClick={() => dispatch({ type: 'NEXT_TEAM' })}
+                sx={{ py: 2.5, fontSize: '1.125rem', boxShadow: '6px 6px 0 var(--ink)' }}
               >
-                {state.currentTeamIndex === state.teams.length - 1 ? 'Start Next Round' : 'Next Team'}
+                {isLastTeam ? 'Start Next Round' : 'Next Team'}
               </Button>
             </>
           )}
@@ -141,47 +196,108 @@ export function ActiveRound() {
     );
   }
 
+  // ACTIVE ROUND
+  const catColor = CATEGORY_COLORS[state.settings.category] ?? 'var(--lime)';
+
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 4 }}>
+    <Box sx={{ minHeight: '100vh', py: 4 }}>
       <ResetButton />
       <Container maxWidth="md">
-        {/* Header with team and round info */}
-        <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* Header */}
+        <Box
+          sx={{
+            mb: 2.5,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 1.5,
+          }}
+        >
           <Chip
-            label={`Round ${state.currentRound} of ${state.totalRounds}`}
-            color="primary"
-            size="medium"
+            label={`ROUND ${state.currentRound} / ${state.totalRounds}`}
+            color="info"
           />
-          <Typography variant="h6">
+          <Typography
+            sx={{
+              fontFamily: '"Archivo Black", Impact, sans-serif',
+              fontSize: 18,
+              letterSpacing: '-0.02em',
+            }}
+          >
             {currentTeam.name}
           </Typography>
           <Chip
-            label={`Score: ${currentTeam.score}`}
-            color="secondary"
-            size="medium"
+            color="warning"
+            label={
+              <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                SCORE
+                <Box
+                  component="span"
+                  sx={{
+                    fontFamily: '"JetBrains Mono", monospace',
+                    backgroundColor: 'var(--ink)',
+                    color: 'var(--paper)',
+                    padding: '2px 8px',
+                    ml: 0.75,
+                    border: '2px solid var(--ink)',
+                  }}
+                >
+                  {currentTeam.score}
+                </Box>
+              </Box>
+            }
           />
         </Box>
 
-        {/* Timer Progress Bar */}
-        <Paper elevation={3} sx={{ mb: 3, overflow: 'hidden' }}>
-          <LinearProgress
-            variant="determinate"
-            value={progress}
-            sx={{
-              height: 10,
-              bgcolor: 'grey.200',
-              '& .MuiLinearProgress-bar': {
-                bgcolor: isWarning ? 'error.main' : 'success.main',
-              },
-            }}
-          />
-          <Box sx={{ p: 2, textAlign: 'center' }}>
-            <Typography
-              variant="h2"
+        {/* Timer card */}
+        <Paper
+          sx={{
+            p: 0,
+            mb: 2,
+            overflow: 'hidden',
+          }}
+        >
+          <Box sx={{ height: 10, backgroundColor: 'var(--ink)', position: 'relative' }}>
+            <Box
               sx={{
-                fontWeight: 'bold',
-                color: isWarning ? 'error.main' : 'text.primary',
-                fontFamily: 'monospace',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: `${progress}%`,
+                backgroundColor: isWarning ? 'var(--magenta)' : 'var(--lime)',
+                transition: 'width 1s linear',
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              padding: '20px 24px',
+              textAlign: 'center',
+              backgroundColor: isWarning ? 'var(--magenta)' : 'background.paper',
+              color: isWarning ? 'var(--paper)' : 'text.primary',
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: isWarning ? 'rgba(255,255,255,0.85)' : 'text.secondary',
+                mb: 0.5,
+              }}
+            >
+              {isWarning ? 'Hurry!' : 'Time Left'}
+            </Typography>
+            <Typography
+              className={isWarning ? 'cg-warn-flash' : ''}
+              sx={{
+                fontFamily: '"JetBrains Mono", monospace',
+                fontWeight: 700,
+                fontSize: 'clamp(3.5rem, 11vw, 6rem)',
+                lineHeight: 1,
+                letterSpacing: '-0.04em',
               }}
             >
               {formatTime(timeRemaining)}
@@ -189,112 +305,186 @@ export function ActiveRound() {
           </Box>
         </Paper>
 
-        {/* Word Display */}
+        {/* Word card */}
         <Paper
-          elevation={3}
           sx={{
-            p: 6,
-            mb: 3,
-            minHeight: 200,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: 'wordCard.background',
-            color: 'white',
+            p: { xs: 4, sm: 6 },
+            mb: 2.5,
+            minHeight: 220,
+            display: 'grid',
+            placeItems: 'center',
+            backgroundColor: 'var(--cobalt)',
+            color: 'var(--paper)',
+            borderColor: 'var(--ink)',
+            boxShadow: '6px 6px 0 var(--ink)',
           }}
         >
+          <Box sx={{ display: 'inline-flex', gap: 1, alignItems: 'center', mb: 2 }}>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                backgroundColor: catColor,
+                border: '2px solid var(--paper)',
+              }}
+            />
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.85)',
+              }}
+            >
+              {state.settings.category} · {state.settings.difficulty}
+            </Typography>
+          </Box>
           <Typography
-            variant="h3"
-            component="div"
             sx={{
-              fontWeight: 'bold',
+              fontFamily: '"Archivo Black", Impact, sans-serif',
+              letterSpacing: '-0.02em',
+              lineHeight: 0.95,
+              fontSize: 'clamp(2.75rem, 7vw, 5rem)',
               textAlign: 'center',
+              textWrap: 'balance' as never,
               wordBreak: 'break-word',
             }}
           >
-            {state.currentWord || 'Loading...'}
+            {state.currentWord || 'Loading…'}
           </Typography>
         </Paper>
 
-        {/* Controls */}
-        <Stack spacing={2}>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              size="large"
-              startIcon={<SkipNextIcon />}
-              onClick={handleSkip}
-              disabled={isPaused}
-              sx={{ py: 2 }}
-            >
-              Skip
-            </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              size="large"
-              color="success"
-              startIcon={<CheckCircleIcon />}
-              onClick={handleCorrect}
-              disabled={isPaused}
-              sx={{ py: 2 }}
-            >
-              Correct!
-            </Button>
-          </Box>
+        {/* Skip + Correct */}
+        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5, mb: 1.5 }}>
+          <Button
+            variant="contained"
+            color="error"
+            size="large"
+            startIcon={<ChevronsRight size={22} strokeWidth={2} />}
+            onClick={handleSkip}
+            disabled={isPaused}
+            sx={{ py: 2.5, fontSize: '1.125rem', boxShadow: '6px 6px 0 var(--ink)' }}
+          >
+            Skip
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            startIcon={<Check size={22} strokeWidth={2} />}
+            onClick={handleCorrect}
+            disabled={isPaused}
+            sx={{ py: 2.5, fontSize: '1.125rem', boxShadow: '6px 6px 0 var(--ink)' }}
+          >
+            Correct!
+          </Button>
+        </Box>
 
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              size="medium"
-              startIcon={isPaused ? <PlayArrowIcon /> : <PauseIcon />}
-              onClick={isPaused ? resumeTimer : pauseTimer}
-            >
-              {isPaused ? 'Resume' : 'Pause'}
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              size="medium"
-              color="error"
-              startIcon={<StopIcon />}
-              onClick={handleEndRound}
-            >
-              End Round
-            </Button>
-          </Box>
-        </Stack>
+        {/* Pause + End */}
+        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5, mb: 4 }}>
+          <Button
+            variant="text"
+            startIcon={
+              isPaused ? <Play size={18} strokeWidth={2} /> : <Pause size={18} strokeWidth={2} />
+            }
+            onClick={isPaused ? resumeTimer : pauseTimer}
+          >
+            {isPaused ? 'Resume' : 'Pause'}
+          </Button>
+          <Button
+            variant="text"
+            startIcon={<Square size={18} strokeWidth={2} />}
+            onClick={handleEndRound}
+          >
+            End Round
+          </Button>
+        </Box>
 
-        {/* All Teams Scores */}
-        <Paper elevation={1} sx={{ mt: 4, p: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            All Scores:
+        {/* All Scores */}
+        <Box>
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: '0.75rem',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'text.secondary',
+              mb: 1,
+            }}
+          >
+            All Scores
           </Typography>
-          <Stack spacing={1}>
+          <Stack spacing={0}>
             {state.teams.map((team, index) => (
-              <Box
+              <ScoreRow
                 key={team.id}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  p: 1.5,
-                  bgcolor: index === state.currentTeamIndex ? 'teamHighlight.background' : 'transparent',
-                  borderRadius: 1,
-                }}
-              >
-                <Typography variant="body1">
-                  {team.name}
-                </Typography>
-                <Typography variant="body1" fontWeight="bold">
-                  {team.score}
-                </Typography>
-              </Box>
+                name={team.name}
+                score={team.score}
+                active={index === state.currentTeamIndex}
+                stack={index > 0}
+              />
             ))}
           </Stack>
-        </Paper>
+        </Box>
       </Container>
+    </Box>
+  );
+}
+
+interface ScoreRowProps {
+  name: string;
+  score: number;
+  active?: boolean;
+  winner?: boolean;
+  stack?: boolean;
+}
+
+function ScoreRow({ name, score, active, winner, stack }: ScoreRowProps) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '14px 18px',
+        border: winner ? '4px solid var(--ink)' : '2px solid var(--ink)',
+        borderTop: stack ? 0 : undefined,
+        backgroundColor: winner
+          ? 'var(--gold)'
+          : active
+            ? 'var(--yellow)'
+            : 'background.paper',
+      }}
+    >
+      <Typography
+        sx={{
+          fontFamily: '"Space Grotesk", sans-serif',
+          fontWeight: 500,
+          fontSize: 16,
+          color: 'var(--ink)',
+        }}
+      >
+        {name}
+        {active && (
+          <Box
+            component="span"
+            sx={{ ml: 1, fontFamily: '"JetBrains Mono", monospace', fontSize: 12 }}
+          >
+            ◀ ACTING
+          </Box>
+        )}
+      </Typography>
+      <Typography
+        sx={{
+          fontFamily: '"JetBrains Mono", monospace',
+          fontWeight: 700,
+          fontSize: 20,
+          color: 'var(--ink)',
+        }}
+      >
+        {score}
+      </Typography>
     </Box>
   );
 }

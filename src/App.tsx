@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { GameProvider, useGame } from './context/GameContext';
 import { ThemeContextProvider, useThemeContext } from './context/ThemeContext';
@@ -27,7 +28,11 @@ function GameRouter() {
 }
 
 function ThemeAwareApp() {
-  const { theme } = useThemeContext();
+  const { theme, mode } = useThemeContext();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', mode);
+  }, [mode]);
 
   return (
     <ThemeProvider theme={theme}>
