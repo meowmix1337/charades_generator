@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.6] - 2026-05-08
+## [0.0.7] - 2026-05-09
 
 ### Changed
 
@@ -21,6 +21,12 @@ All notable changes to this project will be documented in this file.
 - `lucide-react` dependency for sharp 2px-stroke iconography
 - `Logo` component with lime square mask mark and Archivo Black wordmark
 - New keyframes: `cg-pop-in`, `cg-warn-flash`, `cg-trophy-pop`, `cg-title-shake`, `cg-confetti-drop`, `cg-burst-rays`
+
+## [0.0.6] - 2026-02-21
+
+### Added
+
+- 28 new words to Actions category across all difficulty levels (easy: +17, medium: +9, hard: +2)
 
 ## [0.0.5] - 2026-02-21
 
