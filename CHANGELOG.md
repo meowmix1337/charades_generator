@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.6] - 2026-02-21
+
+### Added
+
+- 28 new words to Actions category across all difficulty levels (easy: +17, medium: +9, hard: +2)
+
 ## [0.0.5] - 2026-02-21
 
 ### Added
